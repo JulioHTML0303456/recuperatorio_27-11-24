@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 function App() {
@@ -8,6 +8,7 @@ function App() {
   const [products, setproducts] = useState([]);
   const[productsCategory, setproductsCategory] = useState([]);
   const [errorMessage, seterrorMessage]= useState('')
+  const ref = useRef()
 
   useEffect(() => {
     axios.get(`https://fakestoreapi.com/products`)
@@ -19,22 +20,22 @@ function App() {
   }, [])
 
   const enviar = () => {
-    axios.get(`https://fakestoreapi.com/products/${category}`)
+    https://fakestoreapi.com/products/category/electronics
+    axios.get(`https://fakestoreapi.com/products/category/${category}`)
     .then ((res)=>{
       if(!res.ok){setproductsCategory(res.data)}
       else{throw new Error(`${res.status}`)}
     })
     .catch(error => seterrorMessage(error.message))
-    console.log(productsCategory)
   }
 
   const handleCategoryChange = (event) => setCategory(event.target.value)
 
   const selectedCategory = (e) =>{
-
+      ref.current = e.taget.value
   }
 
-  console.log(products)
+  
 
   return (
     <main>
@@ -43,16 +44,13 @@ function App() {
 
       <div>
         <h2>Lista de todos los productos disponibles:</h2>
-        <ul>
-        {products.map((product) =>{
-          console.log(product.id);
+        <ul className="result-box">
+        {products.map((product) =>
+ 
           <li key={product.id}>{product.title}</li>/*, <p>{product.price}</p>*/
-        })}
-        </ul>
-        <p className="result-box">
+        )}
 
-          
-        </p>
+        </ul>
       </div>
 
       <div>
@@ -60,18 +58,19 @@ function App() {
 
         <h3>Ingrese una categoría:</h3>
         <select onChange={selectedCategory}>
-          {selectCategory.map((cat)=>{
+          {selectCategory.map((cat)=>
+
             <option value={cat}>{cat}</option>
-          })}
+          )}
         </select>
         <input type="text" value={category} onChange={handleCategoryChange} />
         <button onClick={enviar}>Enviar</button>
 
         <h3>Productos de la categoría ingresada:</h3>
         <ul className="result-box">
-        {productsCategory.map((product) =>{
-          <li key={product.id}>{product.title}</li>/*, <p>{product.price}</p>*/
-        })}
+        {productsCategory.map((product) =>  
+          <li key={product.id}>{product.title}</li>
+        )}
         </ul>
 
       </div>
